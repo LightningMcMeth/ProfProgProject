@@ -8,8 +8,13 @@ public class Main {
         
         boolean continueRunning = true;
         Command userCommand = null;
+        List<String> placeholderCategories = new ArrayList<>();
+        placeholderCategories.add("switch");
+        placeholderCategories.add("keyboard");
+        placeholderCategories.add("deskmat");
 
         StockManager stockManager = new StockManager();
+        ProductCatalog productCatalog = new ProductCatalog(placeholderCategories);
         Scanner userInput = new Scanner(System.in);
 
         while (continueRunning) {
@@ -28,44 +33,50 @@ public class Main {
                     break;
 
                 case ADD:
-                    addProduct(userInput, stockManager);
+                    addProduct(userInput, stockManager, productCatalog);
                     break;
 
                 case REMOVE:
                     removeProduct(userInput, stockManager);
                     break;
 
+                case EDIT:
+
+                    break;
+
                 case STOCK:
                     manageStock(userInput, stockManager);
                     break;
 
+                case CATALOG:
+                    manageCatalog(userInput, productCatalog, stockManager);
+                    break;
+
                 case EXIT:
-                    endProgram(userInput, continueRunning);
+                    continueRunning = false;
+                    System.out.println("Goodbye!");
                     break;
 
                 default:
                     System.out.println("Invalid command :( try again, but this time type properly.");
             }
         }
-    }
 
-    private static void printHelp() {
-        System.out.println("Hello :)");
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-    }
-
-    private static void endProgram(Scanner userInput, boolean continueRunning) {
-        continueRunning = false;
         userInput.close();
     }
 
-    private static void addProduct(Scanner userInput, StockManager stockManager) {
+    private static void printHelp() {
+        System.out.println("Available commands:");
+        System.out.println("HELP - Display this help message");
+        System.out.println("ADD - Add a new product");
+        System.out.println("REMOVE - Remove a product");
+        System.out.println("STOCK - Manage stock of a product");
+        System.out.println("CATALOG - View product catalog");
+        System.out.println("EDIT - Edit a product");
+        System.out.println("EXIT - Exit the program");
+    }
+
+    private static void addProduct(Scanner userInput, StockManager stockManager, ProductCatalog productCatalog) {
 
         Integer id = stockManager.generateId();
         System.out.println("Enter product name: ");
@@ -84,8 +95,8 @@ public class Main {
             }
         }
 
-        Integer lowerThreshold = null;
-        Integer upperThreshold = null;
+        Integer lowerThreshold = 0;
+        Integer upperThreshold = 0;
         while (lowerThreshold >= upperThreshold || lowerThreshold <= 0 || upperThreshold <= 0) {
 
             System.out.println("Enter lower stock threshold: ");
@@ -108,6 +119,8 @@ public class Main {
             }
         }
 
+        String category = productCatalog.getValidCategory(userInput);
+
         List<String> additionalParameters = new ArrayList<String>();
         System.out.println("Do you want to add additional parameters? (yes/no)");
         String addParams = userInput.nextLine();
@@ -126,9 +139,10 @@ public class Main {
             }
         }
 
-        Product newProduct = new Product(id, name, description, additionalParameters, price, lowerThreshold, upperThreshold, stock);
+        Product newProduct = new Product(id, name, description, additionalParameters, price, lowerThreshold, upperThreshold, stock, category);
+        
         stockManager.addProduct(newProduct);
-        System.out.println("Product" + newProduct.getName() + " added successfully");
+        System.out.println("Product " + newProduct.getName() + " added successfully");
     }
 
     public static void removeProduct(Scanner userInput, StockManager stockManager) {
@@ -169,7 +183,11 @@ public class Main {
             stockManager.decreaseStock(product.getProductId(), quantity);
         }
 
-        System.out.println(product.getName() + " stock has been modified" + oldStock + " -> " + product.getStock());
+        System.out.println(product.getName() + " stock has been modified " + oldStock + " -> " + product.getStock());
+    }
+
+    public static void editProduct(Scanner userInput, StockManager stockManager) {
+
     }
 
     public static Product getProductByIdOrName(Scanner userInput, StockManager stockManager) {
@@ -187,5 +205,41 @@ public class Main {
         }
 
         return product;
+    }
+
+    public static void manageCatalog(Scanner userInput, ProductCatalog productCatalog, StockManager stockManager) {
+
+        System.out.println("Enter search parameter (all, name, category, id): ");
+        String parameter = userInput.nextLine();
+
+        switch (parameter.toLowerCase()) {
+            case "all":
+                productCatalog.printAllProducts(stockManager.getAllProducts());
+                break;
+
+            case "name":
+                System.out.println("Enter product name: ");
+                String name = userInput.nextLine();
+
+                productCatalog.printProductsByName(stockManager.getAllProducts(), name);
+                break;
+
+            case "category":
+                System.out.println("Enter product category: ");
+                String category = userInput.nextLine();
+
+                productCatalog.printProductCategory(stockManager.getAllProducts(), category);
+                break;
+
+            case "id":
+                System.out.println("Enter product ID: ");
+                Integer id = Integer.parseInt(userInput.nextLine());
+
+                productCatalog.printProductsById(stockManager.getAllProducts(), id);
+                break;
+
+            default:
+                System.out.println("Invalid parameter.");
+        }
     }
 }

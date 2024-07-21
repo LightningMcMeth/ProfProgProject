@@ -3,6 +3,8 @@ public enum Command {
     ADD,
     REMOVE,
     STOCK,
+    CATALOG,
+    EDIT,
     EXIT;
 
     public static Command fromString(String command) {

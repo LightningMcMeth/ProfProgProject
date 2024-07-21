@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class StockManager {
     
@@ -11,6 +13,7 @@ public class StockManager {
 
     public void addProduct(Product newProduct) {
         products.put(newProduct.getProductId(), newProduct);
+        updateStockLevel(newProduct);
     }
 
     public void removeProductById(Integer productId) {
@@ -34,6 +37,7 @@ public class StockManager {
 
         if (product != null) {
             product.setStock(product.getStock() + quantity);
+            updateStockLevel(product);
 
             alertQuantity(product.getStock(), product.getLowerThreshold(), product.getUpperThreshold(), product.getName());
         } 
@@ -49,6 +53,7 @@ public class StockManager {
 
             if (product.getStock() > quantity) {
                 product.setStock(product.getStock() - quantity);
+                updateStockLevel(product);
 
                 alertQuantity(product.getStock(), product.getLowerThreshold(), product.getUpperThreshold(), product.getName());
             } 
@@ -68,6 +73,25 @@ public class StockManager {
         } 
         else if (stock >= upperBound) {
             System.out.println(name + " is overstocked.");
+        }
+    }
+
+    private void updateStockLevel(Product product) {
+        Integer stock = product.getStock();
+        Integer lowerBound = product.getLowerThreshold();
+        Integer upperBound = product.getUpperThreshold();
+
+        if (stock == 0) {
+            product.setStockLevel("out of stock");
+        }
+        else if (stock <= lowerBound) {
+            product.setStockLevel("low");
+        } 
+        else if (stock >= upperBound) {
+            product.setStockLevel("overstocked");
+        }
+        else {
+            product.setStockLevel("sufficient");
         }
     }
 
@@ -99,4 +123,9 @@ public class StockManager {
         }
         return lastUsedId;
     }
+
+    public List<Product> getAllProducts() {
+        return new ArrayList<>(products.values());
+    }
+
 }
