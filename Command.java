@@ -5,6 +5,10 @@ public enum Command {
     STOCK,
     CATALOG,
     EDIT,
+    ORDER,
+    SAVE,
+    LOAD,
+    PATH,
     EXIT;
 
     public static Command fromString(String command) {
@@ -16,7 +20,3 @@ public enum Command {
         }
     }
 }
-
-//Commands to add:
-//LOAD - loads config file with products
-//SAVE - saves products to config file. Will also do this automatically every time the program shuts down

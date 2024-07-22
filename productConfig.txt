@@ -1,0 +1,8 @@
+switch, keyboard, kit, deskmat, mousemat, backplate, pcb, case, lube
+0, gateron yellow, linear gateron switch with 45g actuation force and milky housing, 2.99, 300-800, 523, , switch
+48, razer blackwidow, gaming keyboard meant for people without taste, 149.99, 10-20, 16, , keyboard
+1, holy panda, tactile pre-lubed mechanical switch with 38g actuation force and 3.8mm travel, 5.99, 200-400, 500, , switch
+3, krytox GPL 205g0 lube, lube for linear mechanical switches, 5.3, 5-15, 3, , lube
+4, kailh box navy, clickly kailh box switch with 60g actuation force and clear housing, 3.99, 270-500, 197, , switch
+10, cherry mx brown, tactile cherry mx switch with 50g actuation force and black housing, 4.99, 200-600, 710, , switch
+107, wavy navy deskmat, deskmat from goodeskmats.com with a navy-colored wave pattern, 19.99, 15-27, 18, , deskmat

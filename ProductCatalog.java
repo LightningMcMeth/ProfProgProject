@@ -9,7 +9,7 @@ public class ProductCatalog {
     }
 
     public void printAllProducts(List<Product> products) {
-        
+
         for (Product product : products) {
             printProductDetails(product);
         }
@@ -52,6 +52,8 @@ public class ProductCatalog {
         System.out.println("Category: " + product.getCategory());
         System.out.println("Stock Level: " + product.getStockLevel());
         System.out.println("Stock: " + product.getStock());
+        String additionalParams = String.join("-", product.getAdditionalParameters());
+        System.out.println("Additional parameters: " + additionalParams);
         System.out.println("---------------------------");
     }
 
@@ -71,5 +73,21 @@ public class ProductCatalog {
             }
         }
         return category;
+    }
+
+    public void addCategory(String category) {
+        if (!categories.contains(category)) {
+            categories.add(category);
+        }
+    }
+
+    public void removeCategory(String category) {
+        if(!categories.contains(category)) {
+            categories.remove(category);
+        }
+    }
+
+    public List<String> getCategories() {
+        return categories;
     }
 }

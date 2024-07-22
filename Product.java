@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Product {
@@ -23,6 +24,20 @@ public class Product {
         this.stock = stock;
         this.additionalParameters = additionalParams;
         this.category = category;
+    }
+
+    public Product(Product other) {
+        this.productId = other.productId;
+        this.name = other.name;
+        this.description = other.description;
+        this.additionalParameters = new ArrayList<>(other.additionalParameters);
+        this.price = other.price;
+        this.stockThresholds = new Integer[2];
+        this.stockThresholds[0] = other.stockThresholds[0];
+        this.stockThresholds[1] = other.stockThresholds[1];
+        this.stock = other.stock;
+        this.category = other.category;
+        this.stockLevel = other.stockLevel;
     }
 
     public String getName() {

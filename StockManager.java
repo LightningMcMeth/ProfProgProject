@@ -1,14 +1,16 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Iterator;
 
 public class StockManager {
     
     private HashMap<Integer, Product> products;
     private Integer lastUsedId = 0;
 
-    public StockManager() {
-        products = new HashMap<Integer, Product>();
+    public StockManager(HashMap<Integer, Product> initialProducts) {
+        this.products = initialProducts != null ? initialProducts : new HashMap<>();
     }
 
     public void addProduct(Product newProduct) {
@@ -30,7 +32,8 @@ public class StockManager {
 
     public void increaseStock(Integer productId, int quantity) {
         if (quantity <= 0) {
-            System.out.println("Invalid quantity value. Qunatity should be larger than 0.");       
+            System.out.println("Invalid quantity value. Quantity should be larger than 0.");
+            return;
         }
 
         Product product = getProductById(productId);
@@ -48,10 +51,9 @@ public class StockManager {
 
     public void decreaseStock(Integer productId, Integer quantity) {
         Product product = getProductById(productId);
-        
-        if (product != null) {
 
-            if (product.getStock() > quantity) {
+        if (product != null) {
+            if (product.getStock() >= quantity) {
                 product.setStock(product.getStock() - quantity);
                 updateStockLevel(product);
 
@@ -69,10 +71,14 @@ public class StockManager {
     private void alertQuantity(Integer stock, Integer lowerBound, Integer upperBound, String name) {
 
         if (stock <= lowerBound) {
+            System.out.println("-=-=-=-=-");
             System.out.println(name + " stock is low.");
+            System.out.println("-=-=-=-=-");
         } 
         else if (stock >= upperBound) {
+            System.out.println("-=-=-=-=-");
             System.out.println(name + " is overstocked.");
+            System.out.println("-=-=-=-=-");
         }
     }
 
@@ -107,11 +113,12 @@ public class StockManager {
     }
 
     public void removeProductByName(String productName) {
-
-        for (Product product : products.values()) {
-            
-            if (product.getName().equals(productName)) {
-                products.remove(product.getProductId());
+        Iterator<Map.Entry<Integer, Product>> iterator = products.entrySet().iterator();
+        
+        while (iterator.hasNext()) {
+            Map.Entry<Integer, Product> entry = iterator.next();
+            if (entry.getValue().getName().equals(productName)) {
+                iterator.remove();
             }
         }
     }
